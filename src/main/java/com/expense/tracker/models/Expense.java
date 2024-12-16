@@ -8,6 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "expenses")
@@ -16,16 +19,17 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull(message = "Amount is required")
+    @Positive(message = "Amount must be greater than zero")
     private Double amount;
 
-    @Column(nullable = false)
+    @NotNull(message = "Category is required")
     private String category;
 
-    @Column(nullable = false)
+    @NotNull(message = "Date is required")
     private LocalDate date;
 
-    @Column(length = 500)
+    @Size(max = 500,message = "Desciption must not exceeds 500 charecters")
     private String description;
 
     // Getter and Setters

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.expense.tracker.models.Expense;
 import com.expense.tracker.services.ExpenseService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -36,7 +39,7 @@ public class ExpenseController {
     }
     
     @PostMapping
-    public Expense addExpense(@RequestBody Expense expense){
+    public Expense addExpense(@Valid @RequestBody Expense expense){
         return expenseService.addExpense(expense);
     }
 
