@@ -1,9 +1,12 @@
 package com.expense.tracker.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.expense.tracker.models.Expense;
@@ -15,8 +18,22 @@ public class ExpenseService {
     @Autowired
     private ExpenseRepository expenseRepository;
 
-    public List<Expense> getAllExpenses(){
-        return expenseRepository.findAll();
+    public List<Expense> getAllExpenses(String category,LocalDate startDate, LocalDate endDate,int page,int size){
+
+        Pageable pageable=PageRequest.of(page, size);
+        //Apply filters and return the result
+        if(category!=null && startDate!=null && endDate!=null){
+            return expenseRepository.findByCategoryAndDateBetween(category, startDate, endDate, pageable).getContent();
+        }
+        else if(category !=null){
+            return expenseRepository.findByCategory(category, pageable).getContent();
+        }
+        else if(startDate!=null && endDate!=null){
+            return expenseRepository.findByDateBetween(startDate, endDate, pageable).getContent();
+        }
+
+        // If no filter is provided
+        return expenseRepository.findAll(pageable).getContent();
     }
 
     public Optional<Expense> getExpenseById(Long id){
